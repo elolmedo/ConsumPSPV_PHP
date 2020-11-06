@@ -1,0 +1,27 @@
+{
+    "name": "yuloh/expect",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matt Allan",
+            "email": "matthew.james.allan@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Yuloh\\Expect\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "psr/log": "^1.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "~2.3",
+        "phpunit/phpunit": "4.*"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "cs": "phpcs --standard=psr2 src/"
+    }
+}

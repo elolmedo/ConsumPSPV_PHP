@@ -1,0 +1,75 @@
+.cajas {
+    /* Size and position */
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+    padding: 5%;
+
+    /* Styles */
+    background: #fff;
+    border-radius: 7px;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(50,50,50,0.1);
+    cursor: pointer;
+    outline: none;
+
+    /* Font settings */
+    font-weight: bold;
+    color: #8AA8BD;
+}
+
+.cajas-consumos {
+    /* Size and position */
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+    padding: 5%;
+
+    /* Styles */
+    background: #fff;
+    border-radius: 7px;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(50,50,50,0.1);
+    cursor: pointer;
+    outline: none;
+
+    /* Font settings */
+    font-weight: bold;
+    color: #8AA8BD;
+}
+
+#cuerpo {
+	
+	margin-top: 2%;
+	
+}
+
+#homeImage {
+	margin-top: 2%;
+	padding: 5%;
+}
+
+#tagConsum {
+	margin-bottom: 2%;
+}
+
+
+.iconos {
+	margin-top: 15%;
+	padding: 2% 30% 2% 30%;	
+}
+
+.logo {
+	
+	width: 20%
+	
+}
+
+.Error {
+	color: red;
+}
+
+.Ok {
+	color: green;
+}
+
