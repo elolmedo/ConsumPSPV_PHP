@@ -1,0 +1,72 @@
+###
+### Consultas de duplicación, Eliminación de duplicados
+###
+
+####################################################################################################
+	con edificios
+	
+	
+SELECT mes, temporada, id_edifici, planta_edifici, id_preu, num_botellas, id
+	FROM pspv_schema.consumoxiflow_ampolla
+	where id_edifici like 'XAL' and temporada = 2020;
+
+//Ver entradas repetidas
+SELECT id, COUNT(*)
+	FROM pspv_schema.consumoxiflow_ampolla
+	where id_edifici like 'XAL'	and temporada = 2015
+	GROUP BY id
+	HAVING COUNT(*) > 1;
+
+//Función para borrar los duplicados
+WITH duplicados AS (
+  SELECT ctid, ROW_NUMBER() OVER (PARTITION BY id ORDER BY ctid) AS fila_num
+  FROM pspv_schema.consumoxiflow_ampolla
+ where id_edifici like 'XAL'	
+)
+DELETE FROM pspv_schema.consumoxiflow_ampolla
+WHERE ctid IN (
+  SELECT ctid
+  FROM duplicados
+  WHERE fila_num > 1
+);
+
+WITH filas_marcadas AS (
+  SELECT mes, temporada, id_edifici, planta_edifici, id_preu, num_botellas, id,
+         ROW_NUMBER() OVER (ORDER BY id DESC) AS fila_num
+  FROM pspv_schema.consumoxiflow_ampolla
+  WHERE id_edifici LIKE 'GRE' AND temporada = 2016
+)
+DELETE FROM pspv_schema.consumoxiflow_ampolla
+WHERE id IN (
+  SELECT id
+  FROM filas_marcadas
+  WHERE fila_num >= 25
+);
+
+DELETE FROM pspv_schema.consumoxiflow_ampolla
+WHERE id = 1059
+
+
+
+
+############################################################################################
+	sin edificios
+SELECT mes, temporada, consum_tram1, consum_tram2, consum_tram3, totalf, id
+	FROM pspv_schema.consumsaigua;
+
+SELECT id, COUNT(*)
+FROM pspv_schema.consumsaigua
+GROUP BY id
+HAVING COUNT(*) > 1;
+
+
+WITH duplicados AS (
+  SELECT ctid, ROW_NUMBER() OVER (PARTITION BY id ORDER BY ctid) AS fila_num
+  FROM pspv_schema.consumsaigua
+)
+DELETE FROM pspv_schema.consumsaigua
+WHERE ctid IN (
+  SELECT ctid
+  FROM duplicados
+  WHERE fila_num > 1
+);

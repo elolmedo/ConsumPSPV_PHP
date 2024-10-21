@@ -1,0 +1,67 @@
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 29/11/2023 02:49:00pm
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 29/11/2023 02:50:55pm
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 30/11/2023 02:47:27pm
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 30/11/2023 02:48:40pm
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 04/12/2023 09:17:15am
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 04/12/2023 09:19:09am
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 04/12/2023 09:21:29am
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 04/12/2023 11:01:17am
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for integer: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  syntax error at or near ","
+LINE 1: ...consum_tram2,consum_tram3,totalf) VALUES ('Gener',,0,0,0,0);
+                                                             ^ Fecha: 09/10/2024 07:52:17am
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumoxiflow_ampolla_pkey"
+DETAIL:  Key (mes, temporada, id_edifici, planta_edifici)=(Octubre, 2023, LLE, 4) already exists. Fecha: 09/10/2024 04:09:04pm
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumoxiflow_ampolla_pkey"
+DETAIL:  Key (mes, temporada, id_edifici, planta_edifici)=(Octubre, 2023, LLE, 4) already exists. Fecha: 09/10/2024 04:09:25pm
+[ERR] Fallo: los datos de  no fueron insertados: ERROR:  invalid input syntax for type bigint: ""
+LINE 4:     WHERE id = '';
+                       ^ Fecha: 09/10/2024 05:35:48pm
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for type bigint: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for type bigint: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos no fueron insertados: ERROR:  invalid input syntax for type bigint: ""
+LINE 3:     WHERE id = '';
+                       ^ Fecha :
+[ERR] Fallo: los datos de no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumsgasnatural_pkey"
+DETAIL:  Key (mes, temporada, id_edifici)=(Gener, 2024, PUI) already exists. Fecha: 11/10/2024 08:03:48am
+[ERR] Fallo: los datos de no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumsgasnatural_pkey"
+DETAIL:  Key (mes, temporada, id_edifici)=(Març, 2024, PUI) already exists. Fecha: 11/10/2024 10:18:21am
+[ERR] Fallo: los datos de no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumsgasnatural_pkey"
+DETAIL:  Key (mes, temporada, id_edifici)=(Juliol, 2024, PUI) already exists. Fecha: 11/10/2024 10:22:57am
+[ERR] Fallo: los datos de no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumsgasnatural_pkey"
+DETAIL:  Key (mes, temporada, id_edifici)=(Agost, 2024, PUI) already exists. Fecha: 11/10/2024 11:45:39am
+[ERR] Fallo: los datos de no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumsgasnatural_pkey"
+DETAIL:  Key (mes, temporada, id_edifici)=(Agost, 2024, PUI) already exists. Fecha: 11/10/2024 11:45:46am
+[ERR] Fallo: los datos de no fueron insertados: ERROR:  duplicate key value violates unique constraint "consumsgasnatural_pkey"
+DETAIL:  Key (mes, temporada, id_edifici)=(Septembre, 2024, PUI) already exists. Fecha: 11/10/2024 11:46:19am
