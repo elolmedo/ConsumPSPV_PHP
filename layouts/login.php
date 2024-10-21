@@ -48,11 +48,12 @@
                 	<form method="post" id="accesoForm" action="" accept-charset="utf-8">
                 		<div class="form-group">
                         	<label for="user">Introduce el usuario: </label>
-                            <input type="text" id="user" name="user" value="Insertar correo o nombre de usuario" required="required" placeholder="Usuario" autocomplete="off" maxlength="100">
+			    <input type="text" id="user" name="user" placeholder="Insertar correo o Usuario" required="required"  autocomplete="off" maxlength="100">
+			    <br>
                             <label for="passwd">Introduce la contraseña: </label>
                             <input type="password" id="passwd" name="passwd" placeholder="Password" autocomplete="off" maxlength="16">
                             <br>
-                            <input type="submit" name="registro" class="btn btn-secondary" value="Registrarse">
+                            <input type="submit" name="registro" class="btn btn-secondary" value="Iniciar Sesión">
 
                 		</div>
                 	</form>

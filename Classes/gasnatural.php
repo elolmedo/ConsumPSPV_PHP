@@ -17,7 +17,7 @@ class GasNatural{
     
     //Propierties
     public $mes;
-//     public $temporada;
+    public $temporada;
     public $id_edifici;
     public $conversio;
     public $id_preu;
@@ -29,22 +29,224 @@ class GasNatural{
         $this->connection = $db;
     }
     
+    public function printHeaderTable(){
+    	echo ' 
+		<div class="col-md-12 col container" style="border: 1px solid #920000">
+        	<table id="tabla_ord" class="stripe display cell-border compact order-column" style="width:60%">
+        		<thead>
+        			<tr>
+        				<th>Id</th>
+        				<th>Temporada</th>
+        				<th>Mes</th>
+        				<th>Edifici</th>
+        				<th>Lectura Anterior</th>
+        				<th>Lectura Actual</th>        				
+        			</tr>
+        		</thead>        		
+        	</table>
+        </div>';    
+    }
+    
+    public function lastInsertDT_TRA(){
+    	$data = array();    	
+    	$sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'TRA'
+                                    GROUP BY 1,2,3,4,5,6
+                                    ORDER BY 1 DESC
+                                    LIMIT 6
+                    ";
+    	
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    	    	"Id" => $row['id'],
+    	    	"Temporada" => $row['temporada'],
+    	    	"Mes" => $row['mes'],
+    	    	"Edifici" => $row['id_edifici'],
+    	    	"LecturaAnterior" => $row['lectura_anterior'],
+    	    	"LecturaActual" => $row['lectura_actual']
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["GasNatural_TRA"] = "";
+    	$arrayGas["GasNatural_TRA"] = $data;
+		echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    	
+    	
+    }
+    public function lastInsertDT_GRE(){
+    	$data = array();
+    	$sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'GRE'
+                                    GROUP BY 1,2,3,4,5,6
+                                    ORDER BY 1 DESC
+                                    LIMIT 6
+                    ";
+    	
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"Id" => $row['id'],
+    				"Temporada" => $row['temporada'],
+    				"Mes" => $row['mes'],
+    				"Edifici" => $row['id_edifici'],
+    				"LecturaAnterior" => $row['lectura_anterior'],
+    				"LecturaActual" => $row['lectura_actual']
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["GasNatural_GRE"] = "";
+    	$arrayGas["GasNatural_GRE"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    	
+    	
+    }
+    public function lastInsertDT_XAL(){
+    	$data = array();
+    	$sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'XAL'
+                                    GROUP BY 1,2,3,4,5,6
+                                    ORDER BY 1 DESC
+                                    LIMIT 6
+                    ";
+    	
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"Id" => $row['id'],
+    				"Temporada" => $row['temporada'],
+    				"Mes" => $row['mes'],
+    				"Edifici" => $row['id_edifici'],
+    				"LecturaAnterior" => $row['lectura_anterior'],
+    				"LecturaActual" => $row['lectura_actual']
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["GasNatural_XAL"] = "";
+    	$arrayGas["GasNatural_XAL"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);    	   
+    }
+    public function lastInsertDT_PUI(){
+    	$data = array();
+    	$sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'PUI'
+                                    GROUP BY 1,2,3,4,5,6
+                                    ORDER BY 1 DESC
+                                    LIMIT 6
+                    ";
+    	
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"Id" => $row['id'],
+    				"Temporada" => $row['temporada'],
+    				"Mes" => $row['mes'],
+    				"Edifici" => $row['id_edifici'],
+    				"LecturaAnterior" => $row['lectura_anterior'],
+    				"LecturaActual" => $row['lectura_actual']
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["GasNatural_PUI"] = "";
+    	$arrayGas["GasNatural_PUI"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);    	    
+    }
+    public function lastInsertDT_SUP(){
+    	$data = array();
+    	$sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'SUP'
+                                    GROUP BY 1,2,3,4,5,6
+                                    ORDER BY 1 DESC
+                                    LIMIT 6
+                    ";
+    	
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"Id" => $row['id'],
+    				"Temporada" => $row['temporada'],
+    				"Mes" => $row['mes'],
+    				"Edifici" => $row['id_edifici'],
+    				"LecturaAnterior" => $row['lectura_anterior'],
+    				"LecturaActual" => $row['lectura_actual']
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["GasNatural_SUP"] = "";
+    	$arrayGas["GasNatural_SUP"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);    	   
+    }
+    
+    //Obtain de last three inserts and prepare data for Datatables.
+    public function lastInsertDT(){
+    	$consumo = "Gas Natural";
+    	$arrayEdificis = returnArrayEdificis($consumo);
+    	$data = array();
+    	foreach ($arrayEdificis as $edifici) {
+    		$sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = '$edifici'
+                                    GROUP BY 1,2,3,4,5,6
+                                    ORDER BY 1 DESC
+                                    LIMIT 6
+                    ";
+    		
+    		$result = pg_query($sql);    		    	
+//     		while ($row = pg_fetch_assoc($result)) {    			
+//     			$arrayEdifici = array(
+//     				"Id" => $row['id'], 
+//     				"Temporada" => $row['temporada'],
+//     				"Mes" => $row['mes'],
+//     				"Edifici" => $row['id_edifici'],
+//     				"Lectura Anterior" => $row['lectura_anterior'],
+//     				"Lectura Actual" => $row['lectura_actual']    					
+//     			);    			
+//     		} // fin while
+//     		//$arrayData[$edifici] = $arrayEdifici;
+    		while ($row = pg_fetch_assoc($result)) {
+    			$arrayEdifici = array(
+    					 $row['id'],
+    					 $row['temporada'],
+    					 $row['mes'],
+    					 $row['id_edifici'],
+    					 $row['lectura_anterior'],
+    					 $row['lectura_actual']
+    			);
+    		} // fin while
+    		array_push($data,$arrayEdifici);
+    		
+    	}
+    	 		
+    	
+    	
+     		$arrayGas["GasNatural"] = "";
+     		$arrayGas["GasNatural"] = $data;
+    	
+    		echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    	
+    }
+    
     //Obtain the last 3 inserts
-    public function lastinsert($consumo){
-        
+    public function lastinsert(){
+        $consumo = "Gas Natural";
         $arrayEdificis = returnArrayEdificis($consumo);
         foreach ($arrayEdificis as $edifici) {
             $sql = " SELECT id, temporada, mes, id_edifici, lectura_anterior, lectura_actual
                                     FROM pspv_schema.".$this->table_name."
                                     WHERE id_edifici = '$edifici'
-                                    GROUP BY 1,2,3,4
+                                    GROUP BY 1,2,3,4,5,6
                                     ORDER BY 1 DESC
                                     LIMIT 3
                     ";
             
             $result = pg_query($sql);
-            print "<div class=\"col-md-6\">\n";
-            print "<h4>Coum  Gas Natural 2016 ".$edifici." / Ultimes insercions</h4><br>";
+            print "<div class=\"col-md-8\">\n";
+            print "<h4>Cosum  Gas Natural ".$edifici." / Ultimes insercions</h4><br>";
             print "<table class=\"table table-bordered table-striped\">\n";
             // Obtenemos los nombres de los campos
             
@@ -109,6 +311,10 @@ class GasNatural{
             $sql."".$index .= " AND id_edifici LIKE ";
             $sql."".$index .= "'$nomenclatura'";
             $sql."".$index .= $pregroup;            
+            
+            
+            
+            
             
             try{
                 $result = pg_query($sql."".$index);                
@@ -449,6 +655,8 @@ class GasNatural{
 
     public function dataConsumToArrayGraph($edifici,$temporada,$consumo){
         
+    	error_reporting(0);
+    	
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
@@ -482,19 +690,19 @@ class GasNatural{
             exit;
         }
         
-        // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 	= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost		= pg_fetch_result($result,4,2);
-        $juliol		= pg_fetch_result($result,5,2);
-        $juny		= pg_fetch_result($result,6,2);
-        $maig		= pg_fetch_result($result,7,2);
-        $abril		= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener		= pg_fetch_result($result,11,2);
+
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
         
         $arr[$temporada] = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
@@ -503,6 +711,8 @@ class GasNatural{
 
     public function dataCostToArrayGraph($edifici,$temporada,$consumo){
         
+    	error_reporting(0);
+    	
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
@@ -541,18 +751,30 @@ class GasNatural{
         }
         
         // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 		= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost			= pg_fetch_result($result,4,2);
-        $juliol			= pg_fetch_result($result,5,2);
-        $juny			= pg_fetch_result($result,6,2);
-        $maig			= pg_fetch_result($result,7,2);
-        $abril			= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener			= pg_fetch_result($result,11,2);
+//         $decembre 	= pg_fetch_result($result,0,2);
+//         $novembre 	= pg_fetch_result($result,1,2);
+//         $octubre 		= pg_fetch_result($result,2,2);
+//         $septembre	= pg_fetch_result($result,3,2);
+//         $agost			= pg_fetch_result($result,4,2);
+//         $juliol			= pg_fetch_result($result,5,2);
+//         $juny			= pg_fetch_result($result,6,2);
+//         $maig			= pg_fetch_result($result,7,2);
+//         $abril			= pg_fetch_result($result,8,2);
+//         $marzo		= pg_fetch_result($result,9,2);
+//         $febrer		= pg_fetch_result($result,10,2);
+//         $gener			= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
         
         
         
@@ -621,7 +843,7 @@ class GasNatural{
     
     public function createBackupTable(){
         echo '<p>Procedemos a la copia de la Tabla: '.$this->table_name.'</p>'."\n";
-        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$tabla_consumo.'.sql --table pspv_schema.'.$tabla_consumo.' pspv_db 2>&1';
+        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$this->table_name.'.sql --table pspv_schema.'.$this->table_name.' pspv_db 2>&1';
         
         $salida = system($cmd,$retval);
         
@@ -771,9 +993,230 @@ class GasNatural{
         $octubre = pg_fetch_result($result, 9, 1);
         $novembre = pg_fetch_result($result, 10, 1);
         $decembre = pg_fetch_result($result, 11, 1);
+       
         
         $arr = array($gener, $febrer, $marzo, $abril, $maig, $juny, $juliol, $agost, $septembre, $octubre, $novembre, $decembre);
         return $arr;
+    }
+    
+    public function updateShowForm($id,$mes,$any,$edifici,$anterior,$actual){
+    	
+    	
+    	echo '
+			<script type="txt/javascript">
+				$(document).ready(function (){
+ 					$("#btnGas").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var edifici = $("#edifici").val();
+  						var anterior = $("#anterior").val();
+						var actual = $("#actual").val();
+ 						var tipo = "Gas Natural";
+						var id = '.$id.';
+								
+								
+ 						$.ajax({
+								   type: "POST",
+								   data: {id:id,mes:mes,any:any,edifici:edifici,anterior:anterior,actual:actual,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/updateData.php",
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+  				});
+								
+			</script>
+			<div  class="col-md-12" id="contenedorGas">
+				<h3 id="cabecera-formulario">Actualització de dades en el Gas Natural '.$edifici.'</h3>
+				<form role="form" action="./insercion/ins_gas.php" method="POST">
+					 <div class="form-group">
+						<div class="col-md-12 col">
+							<div class="col-md-8 col">
+								<div class="col-md-4 col">
+									<h4>Mes</h4>
+				   						<input class="form-control" id="selmes" type="text" name="MEs" value="'.$mes.'" required="required">
+								</div>
+								<div class="col-md-4 col">
+									<h4>Any</h4>
+										<input class="form-control" id="selany"type="number" name="anyG" min="2022" max="2030" value="'.$any.'" required="required">
+								</div>
+							</div>
+							<div class="col-md-12 col">
+								<div class="col-md-2 col">
+									<h4>Edifici</h4>
+										<input class="form-control" id="edifici" type="text" name="Edifici" value="'.$edifici.'" required="required">
+								</div>
+								<div class="col-md-5 col">
+									<h4>Lectura Anterior</h4>
+									<input class="form-control" id="anterior" type="float" name="LecturaAnterior" value="'.$anterior.'" required="required">
+								</div>
+								<div class="col-md-5 col">
+									<h4>Lectura Actual</h4>
+									<input  class="form-control" id="actual" type="float" name="LecturaActual" value="'.$actual.'" required="required">
+								</div>
+							</div>
+							<div class="col-md-6 col">
+								<input  class="form-control btn btn-primary" id="btnGas" name="submit" value="Enviar dades" style="margin:2%">
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+				<div class="col-md-8 col" id="responseInsert"></div>
+		';
+    }
+    
+    public function showForm(){
+    
+    	echo '
+			<script type="txt/javascript">
+				$(document).ready(function (){
+ 					$("#btnGas").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var edifici = $("#edifici").val();
+  						var anterior = $("#anterior").val();
+						var actual = $("#actual").val();
+ 						var tipo = "Gas Natural";
+					
+
+
+ 						$.ajax({
+								   type: "POST",
+								   data: {mes:mes,any:any,edifici:edifici,anterior:anterior,actual:actual,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/insertData.php",								      						      
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+ 				});
+          							 
+			</script>
+			<div  class="col-md-12" id="contenedorGas">
+				<h3 id="cabecera-formulario">Inserció de dades en el formulari Gas Natural</h3>
+				<form role="form" action="./insercion/ins_gas.php" method="POST">
+					 <div class="form-group">
+						<div class="col-md-12 col">
+							<div class="col-md-8 col">
+								<div class="col-md-4 col">
+									<h4>Mes</h4>
+				   					<select class="form-control" id="selmes" name="mesosG" required="required" >
+									    <option>Gener</option>
+									    <option>Febrer</option>
+									    <option>Març</option>
+									    <option>Abril</option>
+									    <option>Maig</option>
+									    <option>Juny</option>
+									    <option>Juliol</option>
+									    <option>Agost</option>
+									    <option>Septembre</option>
+									    <option>Octubre</option>
+									    <option>Novembre</option>
+									    <option>Decembre</option>
+								  </select>
+								</div>
+								<div class="col-md-4 col">
+									<h4>Any</h4>
+										<input class="form-control" id="selany"type="number" name="anyG" min="2022" max="2030" value="'.$any.'" required="required">
+								</div>
+							</div>
+							<div class="col-md-9 col">
+								<div class="col-md-3 col">
+									<h4>Selecció d´ edifici</h4>
+								  	<select class="form-control" id="edifici" name="edifici" required="required" >
+								    	<option>Tramuntana</option>
+								    	<option>Xaloc</option>
+								    	<option>Gregal</option>
+								    	<option>Suport</option>
+								    	<option>Puigmal</option>
+								  	</select>
+								</div>
+								<div class="col-md-3 col">
+									<h4>Lectura Anterior</h4>
+									<input class="form-control" id="anterior" type="float" name="LecturaAnterior" required="required">
+								</div>
+								<div class="col-md-3 col">											
+									<h4>Lectura Actual</h4><br>
+									<input  class="form-control" id="actual" type="float" name="LecturaActual" required="required">
+								</div>
+							</div>
+							<div class="col-md-6 col">
+								<input  class="form-control btn btn-primary" id="btnGas" name="submit" value="Enviar dades" style="margin:2%">
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+				<div class="col-md-8 col" id="responseInsert"></div>
+		';
+	    $this->lastinsert();	
+    }
+    
+    public function updateData($id,$mes,$any,$edifici,$anterior,$actual){
+    	
+    	$temporada          = intval($any);
+    	$id_edifici         = $edifici;
+    	$id_preu            = 2;
+    	$conversio          = floatval(11.5);
+    	$lectura_anterior   = intval($anterior);
+    	$lectura_actual     = intval($actual);
+  
+    	$cmd = 'UPDATE pspv_schema.'.$this->table_name.' SET 	mes = \''.$mes.'\', temporada = '.$temporada.',
+																id_edifici = \''.$id_edifici.'\', id_preu = '.$id_preu.',
+																conversio = '.$conversio.', lectura_anterior = '.$lectura_anterior.',
+																lectura_actual = '.$lectura_actual.'
+		WHERE id = \''.$id.'\';'; 
+																
+  
+    	
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos de no fueron insertados: ". pg_last_error($this->connection)." Fecha: ".$GLOBALS['date']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);
+    	}else{
+    		echo '<h5>Datos insertados correctamente</h5>';
+    	}
+    }
+    
+    
+    public function insertOneData($mes,$any,$edifici,$anterior,$actual){
+    	$temporada          = intval($any);
+    	$id_edifici         = traductorEdificis($edifici);
+    	$id_preu            = 2;
+    	$conversio          = floatval(11.5);
+    	$lectura_anterior   = intval($anterior);
+    	$lectura_actual     = intval($actual);
+    	
+    	$cmd = 'INSERT INTO pspv_schema.'.$this->table_name.'(mes,temporada,id_edifici,id_preu,conversio,lectura_anterior,lectura_actual) ';
+    	$cmd .= 'VALUES(\''.$mes.'\','.$temporada.',\''.$id_edifici.'\','.$id_preu.','.$conversio.','.$lectura_anterior.','.$lectura_actual.');';
+    	
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos de no fueron insertados: ". pg_last_error($this->connection)." Fecha: ".$GLOBALS['date']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);
+    	}else{
+    		echo '<h5>Datos insertados correctamente</h5>';
+    	}
     }
 }
   

@@ -64,13 +64,29 @@ if (!function_exists("returnArrayEdificis")){
 ## Function to create menú of selected years
 if(!function_exists("createYears")){
     function createYears(){
-        $years = [2012,2013,2014,2015,2016,2017,2018,2019];        
-        foreach ($years as $year){
-            print '<div class="form-check form-check-inline">';
+        $years = [2012,2013,2014,2015,2016,2017];
+        $years_2 = [2018,2019,2020,2021,2022,2023,2024];
+        $contador = 0;
+             
+        
+        print '<div class="form-check form-check-inline" style="text-align:center">';
+        foreach ($years as $year){        		        	
+           
             print '<input class="form-check-input" type="checkbox" name="'.$year.'" id="'.$year.'" value="'.$year.'">';
-            print '<label class="form-check-label" for="'.$year.'">'.$year.'</label>';
-            print '</div>';
-        }        
+            print '<label class="form-check-label" for="'.$year.'" style="margin-right: 5px;">'.$year.'</label>';
+            
+        }
+        print '</div>';
+        print '<div class="form-check form-check-inline" style="text-align:center">';
+        foreach ($years_2 as $year){
+        	
+        	print '<input class="form-check-input" type="checkbox" name="'.$year.'" id="'.$year.'" value="'.$year.'">';
+        	print '<label class="form-check-label" for="'.$year.'" style="margin-right: 5px;">'.$year.'</label>';
+        	
+        }
+
+        print '</div>';
+        
     }
 }
 
@@ -120,11 +136,8 @@ if (!function_exists("traductorEdificis")){
 // Function to create json structura with data recivied.
 if (!function_exists("createDataGraphs")){
     function createDataGraphs($arrayTemporadas, $arrayGraph, $meses, $jsondata){
-        
         $maxTemporadas = count($arrayTemporadas);
-        
-        if ($maxTemporadas < 2){
-            
+        if ($maxTemporadas < 2){            
             $index = 0;
             foreach($arrayTemporadas  as $temp){
                 if ($temp != ""){
@@ -139,8 +152,6 @@ if (!function_exists("createDataGraphs")){
                     }
                     break;
                 }
-                
-                
             }
             
         }elseif ($maxTemporadas == 2){
@@ -193,11 +204,9 @@ if (!function_exists("createDataGraphs")){
 if (!function_exists("createTotalDataGraph")){
     function createTotalDataGraph($temporadas, $arrayEdificis,$totals, $jsondata){
         
-        $arrayTemporadas = explode(" ", $temporadas);
-        
+        $arrayTemporadas = explode(" ", $temporadas);        
         $maxEdifici = count($arrayEdificis);
         $indice = 0;
-        
         
         if ($maxEdifici < 5 ){
             foreach($arrayTemporadas as $temp){
@@ -453,13 +462,11 @@ if (!function_exists("arrayGraphsTotalsConsumos2")){
 }
 
 if (!function_exists("createCSVConsum")){
-    function createCSVConsum($consumo){
+	function createCSVConsum($tipo){
         
-        
-        $indice = traductorConsumos_DB($consumo);
+		$indice = traductorConsumos_DB($tipo);
         echo '<h6>Creant fitxer file_'.$indice.'.csv</h6>';
         $fichero = "/var/www/ConsumsPSPV/CSV/file_".$indice.".csv";
-        
         return $fichero;
     }
 }
@@ -473,27 +480,19 @@ if (!function_exists("traductorConsumos_DB")){
         
         $arrayConsumo       = ["Electricitat","Aigua","Oxigen","Gas Natural","Oxigen Ampolles"];
         $arrayConsumo_DB    = ["consumselectricitat","consumsaigua","consumoxiflow_tank","consumsgasnatural","consumoxiflow_ampolla"];
-        
-        
-        $max_array = count($arrayConsumo);
-        
-        $tabla_db = "";
-        
+        $max_array = count($arrayConsumo);        
+        $tabla_db = "";        
         for ($x=0; $x<$max_array;$x++){
             if($consumo == $arrayConsumo[$x]){
                 $tabla_db = $arrayConsumo_DB[$x];
-            }
-            
-        }
-        
-        return $tabla_db;
-        
+            }            
+        }        
+        return $tabla_db;        
     }
 }
 
 if (!function_exists("generateMenuDownloadFile")){
     function generateMenuDownloadFile($tipo){
-        
         $indice = traductorConsumos_DB($tipo);
         
         $url = 'CSV/file_'.$indice.'.csv';
@@ -559,4 +558,30 @@ if(!function_exists("comprobateFile")){
     }
 }
 
-
+if (!function_exists("randomChars")){
+	//Función para encryptar un password
+	function randomChars(){
+		//Lectura recomendada: https://mimentevuela.wordpress.com/2015/10/08/establecer-blowfish-como-salt-en-crypt-2/
+		//TODO investigar función rand y revisar la web de arriba
+		$chars = "abcdefghijklmnopqrstuvwxyz1234567890";
+		$new_pass = '';	
+		for($i = 5; $i<30; $i++){
+			$new_pass .= $chars[rand(5,30)];
+		}
+		return $new_pass;
+	}
+}
+if(!function_exists("sumaarrays")){
+	function sumaarrays($array){
+		
+		$arraylength = count($array);
+		$suma = 0;
+		
+		for ($x = 0; $x < $arraylength; $x++){
+			
+			$number = (int)$array[$x];
+			$suma += $number;
+		}
+		return $suma;
+	}
+}

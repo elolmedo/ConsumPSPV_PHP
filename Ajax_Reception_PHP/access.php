@@ -46,11 +46,25 @@ if($nick == $usernameMinus and password_verify($upass,$pass)){
     $_SESSION['estado'] = 'Autorizado';
     $_SESSION['password'] = $pass;
     $_SESSION['userid'] = $userid;
+    
+    echo $_SESSION['usuario'];
+    
+    if ($_SESSION['usuario'] == "amiguez"){
+    	
+    	echo '	<script>
+                	document.location.href = "../layouts/view.php";
+            	</script>
+		';
+    	
+    }else{
+    	
+    	echo '	<script>
+                	document.location.href = "../layouts/fullview.php";
+            	</script>
+		';
+    	
+    }
 
-
-    echo    '<script>
-                document.location.href = "../layouts/fullview.php";
-            </script>';
 
 }else if ($nick != $usernameMinus || $username == "" || $upass == "" || !password_verify($upass,$pass)){
     echo "<script>

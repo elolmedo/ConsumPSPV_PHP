@@ -60,6 +60,7 @@
                     // No funciona
                     $oxigenAmpolles = new OxigenAmpolles($db);
                     $arrayGraphtemporada = $oxigenAmpolles->dataConsumToArrayGraph($edifici, $temporada, $consumo);
+                    var_dump($arrayGraph);
                     array_push($arrayGraph,$arrayGraphtemporada);
 
                 }

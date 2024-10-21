@@ -49,8 +49,10 @@
                     <!-- Input de los años que tiene almacenados la BD para los consumos de Electricidad -->
                        	<?php 
                        	    createYears();
-                       	?>        
-                    <input  class="btn btn-primary" type="button" name="btn_1" value="Triar Formulari Consum" onclick="MostrarTabla1(); CreateGraph1();" />        
+                       	?>
+                    <div style="text-align:center; margin-top:5%;">        
+                    	<input  class="btn btn-primary" type="button" name="btn_1" value="Triar Formulari Consum" onclick="MostrarTabla1(); CreateGraph1();" />
+                    </div>        
                 </form>
                 <br>
             </div>

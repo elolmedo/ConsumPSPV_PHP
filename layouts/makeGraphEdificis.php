@@ -5,16 +5,13 @@
 <div id="Totals_2" class="col-md-12">
 	<h3>Totals con edificis</h3>
 	<hr>    
-    <div id="Form2totales" class="col-md-4">
-            
+    <div id="Form2totales" class="col-md-4">            
             <h5>Selecció de dades per edificis<br> (només Gas Natural<br> i Ampolles Oxigen)</h5>
 	    <hr>
 	    
 	    <div class="form-group">
-	        <form name="form2" action="" method="POST" onload="formOnload()">
-	            
-	            <h6>Tipus de consulta</h6>
-	            
+	        <form name="form2" action="" method="POST" onload="formOnload()">	            
+	            <h6>Tipus de consulta</h6>	            
 	            	<select class="form-control" id="sel_tipus" name="consulta2" required="required"  value="Consum">
 	            		<option>Consum</option>
 	            		<option>PMP</option>
@@ -26,7 +23,6 @@
                                 <option>Oxigen Ampolles</option>
                         </select>
 	            <hr>
-
                    <h4>Edifici</h4>
                    <select class="form-control" id="sel_buid_gas" name="select_build_oxi" required="required"  value="Tramuntana">
                         <option>Gregal</option>
@@ -48,9 +44,9 @@
                             require 'config/core.php';                       
                        	    createYears();
                        	?>    
-                    
-                    <input class="btn btn-primary"type="button" name="bnt_2" value="Triar Formulari Consum" onclick="MostrarTabla2(); CreateGraph2();" />
-	
+                    <div style="text-align:center; margin-top:5%;"> 
+                    	<input class="btn btn-primary"type="button" name="bnt_2" value="Triar Formulari Consum" onclick="MostrarTabla2(); CreateGraph2();" />
+					</div>
 	        </form>
 	    </div> 
 	</div>

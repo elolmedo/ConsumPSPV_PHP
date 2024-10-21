@@ -27,34 +27,115 @@ class OxigenAmpolles{
     public function __construct($db){
         $this->connection = $db;
     }
+    //Last Inserts with Datatable.
+    public function lastInsertDT_GRE(){
+    	$data = array();
+    	$sql = "       SELECT id,temporada,id_edifici, planta_edifici,mes,SUM(num_botellas) as total
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'GRE' 
+                                    GROUP BY 1,2,3,4,5
+                                    ORDER BY 1 desc
+                                    LIMIT 10";
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"id" => $row["id"],
+    				"Temporada" => $row['temporada'],
+    				"Edifici" => $row['id_edifici'],    				
+    				"Mes" => $row['mes'],
+    				"Planta" => $row['planta_edifici'],
+    				"Ampolles" => $row['total'],
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["Oxiflow_GRE"] = "";
+    	$arrayGas["Oxiflow_GRE"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    	
+    	
+    	
+                      
+    }
+    public function lastInsertDT_XAL(){
+    	$data = array();
+    	$sql = "       SELECT id, temporada,id_edifici, planta_edifici,mes,SUM(num_botellas) as total
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'XAL' and temporada = 2023
+                                    GROUP BY 1,2,3,4,5
+                                    ORDER BY 1 DESC 
+                                    LIMIT 10";
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"id" => $row["id"],    				
+    				"Temporada" => $row['temporada'],
+    				"Edifici" => $row['id_edifici'],
+    				"Mes" => $row['mes'],
+    				"Planta" => $row['planta_edifici'],
+    				"Ampolles" => $row['total'],
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["Oxiflow_XAL"] = "";
+    	$arrayGas["Oxiflow_XAL"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    	
+    }
     
-    public function last_insert($consumo){
+    public function lastInsertDT_LLE(){
+    	$data = array();
+    	$sql = "       SELECT id,temporada,id_edifici, planta_edifici,mes,SUM(num_botellas) as total
+                                    FROM pspv_schema.".$this->table_name."
+                                    WHERE id_edifici = 'LLE'  and temporada = 2023
+                                    GROUP BY 1,2,3,4,5
+                                    ORDER BY 1 DESC
+                                    LIMIT 10";
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"id" => $row["id"],    				
+    				"Temporada" => $row['temporada'],
+    				"Edifici" => $row['id_edifici'],
+    				"Mes" => $row['mes'],
+    				"Planta" => $row['planta_edifici'],
+    				"Ampolles" => $row['total'],
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["Oxiflow_LLE"] = "";
+    	$arrayGas["Oxiflow_LLE"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    }
+    
+    
+    public function last_insert(){
+    	$consumo = "Oxigen Ampolles";
         $arrayEdificis = returnArrayEdificis($consumo);
-        
+        print "<div class=\"col-md-12\">\n";
         foreach ($arrayEdificis as $edifici){
             
-            $sql3 = "       SELECT temporada,id_edifici, planta_edifici,mes,SUM(num_botellas)
+            $sql3 = "       SELECT id,temporada,id_edifici, planta_edifici,mes,SUM(num_botellas)
                                     FROM pspv_schema.".$this->table_name."
-                                    WHERE id_edifici = '$edifici'
-                                    GROUP BY 1,2,3,4
+                                    WHERE id_edifici = '$edifici' and temporada = 2023 or temporada = 2024
+                                    GROUP BY 1,2,3,4,5
                                     ORDER BY 1 DESC
                                     LIMIT 10
                                     
                                     
                     ";
             $result = pg_query($sql3);
-            print "<div class=\"col-md-4\">\n";
+            print "<div class=\"col-md-5\">\n";
             print "<h4>Cosum ampolles Oxiflow ".$edifici." / Ultimes insercions</h4><br>";
             print "<table class=\"table table-bordered table-striped\">\n";
             // Obtenemos los nombres de los campos
             
             print "<tr>\n";
-            
-            print "<th>Temporada</th>";
-            print "<th>Edifici</th>";
-            print "<th>Planta</th>";
+            print "<th>Id</th>";
+            print "<th>Temp</th>";
+            print "<th>Edi</th>";
+            print "<th>Plt</th>";
             print "<th>Mes</th>";
-            print "<th>Total Consum Ampolles</th>";
+            print "<th>ampolles</th>";
             
             
             print "</tr>\n\n";
@@ -79,6 +160,8 @@ class OxigenAmpolles{
             print "</table>\n";
             print "</div>\n";
         }
+        print "</div>\n";
+        
     }
     
     public function showTableConsumEdificiAny($temporadas,$edifici,$consum){
@@ -440,26 +523,32 @@ class OxigenAmpolles{
 
     public function dataConsumToArrayGraph($edifici,$temporada,$consumo){
         
+     	error_reporting(0);
+    	
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
         
         $edi_table = traductorEdificis($edifici);
         $pre_sql = "SELECT temporada,mes,SUM(num_botellas)
-                            FROM pspv_schema.";
-        $pre_where = " WHERE temporada = ";
-        $post_where = " AND id_edifici LIKE ";
-        $pre_group = " GROUP BY 1,2
-                       ORDER BY mes='Gener',mes='Febrer',mes='Març',mes='Abril',mes='Maig',mes='Juny',mes='Juliol',mes='Agost',mes='Septembre',mes='Octubre',mes='Novembre',mes='Decembre';";
+                    FROM pspv_schema.";
+        $pre_where = " WHERE ";
+        $post_where1 = " temporada = ";
+        $post_where2 = " AND id_edifici LIKE ";
+        $pre_group = "  GROUP BY 1,2,3
+                        ORDER BY mes='Decembre', mes='Novembre',mes='Octubre', mes='Setembre', mes='Agost', mes='Juliol', mes='Juny',mes='Maig',mes='Abril',mes='Març',mes='Febrer',mes='Gener';";
         
         $sql = "";
         $sql .= $pre_sql;
         $sql .= $this->table_name;
         $sql .= $pre_where;
+        $sql .= $post_where1;
         $sql .= $temporada;
-        $sql .= $post_where;
+        $sql .= $post_where2;
         $sql .= "'$edi_table'";
-        $sql .= $pre_group;
+	    $sql .= $pre_group;
+
+
                 
         try{
             $result = pg_query($sql);
@@ -473,18 +562,18 @@ class OxigenAmpolles{
             exit;
         }
         
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 	= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost		= pg_fetch_result($result,4,2);
-        $juliol		= pg_fetch_result($result,5,2);
-        $juny		= pg_fetch_result($result,6,2);
-        $maig		= pg_fetch_result($result,7,2);
-        $abril		= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener		= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
 
         $arr[$temporada] = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
@@ -492,20 +581,21 @@ class OxigenAmpolles{
     }
 
     public function dataCostToArrayGraph($edifici,$temporada,$consumo){
-        
+            	
+    	error_reporting(0);
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
         
         $edi_table = traductorEdificis($edifici);
         $pre_sql = "SELECT temporada,mes,SUM(num_botellas)*p.cantitat
-                            FROM pspv_schema.";
+                    FROM pspv_schema.";
         $pre_relation = " o, pspv_schema.conversio_preus p ";
         $pre_where = " WHERE  o.id_preu = p.id";
         $post_where1 = " AND temporada = ";
         $post_where2 = " AND id_edifici LIKE ";
         $pre_group = "  GROUP BY temporada,mes,p.cantitat
-                                ORDER BY mes='Decembre', mes='Novembre',mes='Octubre', mes='Septembre', mes='Agost', mes='Juliol', mes='Juny',mes='Maig',mes='Abril',mes='Març',mes='Febrer',mes='Gener';";
+                        ORDER BY mes='Decembre', mes='Novembre',mes='Octubre', mes='Septembre', mes='Agost', mes='Juliol', mes='Juny',mes='Maig',mes='Abril',mes='Març',mes='Febrer',mes='Gener';";
         
         $sql = "";
         $sql .= $pre_sql;
@@ -531,18 +621,18 @@ class OxigenAmpolles{
         }
         
         // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 		= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost			= pg_fetch_result($result,4,2);
-        $juliol			= pg_fetch_result($result,5,2);
-        $juny			= pg_fetch_result($result,6,2);
-        $maig			= pg_fetch_result($result,7,2);
-        $abril			= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener			= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
         
         
         
@@ -610,7 +700,7 @@ class OxigenAmpolles{
     
     public function createBackupTable(){
         echo '<p>Procedemos a la copia de la Tabla: '.$this->table_name.'</p>'."\n";
-        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$tabla_consumo.'.sql --table pspv_schema.'.$tabla_consumo.' pspv_db 2>&1';
+        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$this->table_name.'.sql --table pspv_schema.'.$this->table_name.' pspv_db 2>&1';
         
         $salida = system($cmd,$retval);
         
@@ -766,4 +856,236 @@ class OxigenAmpolles{
         $arr = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
     }
+    
+    public function insertOneData($mes,$any,$edifici,$planta,$ampolles){
+    	$temporada      = intval($any);
+    	$id_edifici 	= traductorEdificis($edifici);
+    	$planta_edifici = intval($planta);
+    	$id_preu        = 4;
+    	$num_ampolles   = intval($ampolles);
+    	
+    	// $cmd = 'INSERT INTO pspv_schema.'.$this->table_name.'(mes,temporada,id_edifici,planta_edifici,id_preu,num_botellas) ';
+    	// $cmd .= 'VALUES (\''.$mes.'\','.$temporada.',\''.$id_edifici.'\','.$planta.','.$id_preu.','.$num_ampolles.');';
+    	
+    	// $res = pg_query($cmd);
+        $cmd = 'INSERT INTO pspv_schema.'.$this->table_name.'(mes,temporada,id_edifici,planta_edifici,id_preu,num_botellas) ';
+        $cmd .= 'VALUES ($1, $2, $3, $4, $5, $6)';
+        $res = pg_query_params($this->connection, $cmd, array($mes, $temporada, $id_edifici, $planta, $id_preu, $num_ampolles));
+
+
+
+
+    	
+    	if(!$res){
+            
+    		$msg = "[ERR] Fallo: los datos de  no fueron insertados: ". pg_last_error($this->connection)." Fecha: ".$GLOBALS['date']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		$this->recoveryOldData();
+    		die($msg);
+    		
+    		
+    	}else{
+    		echo '<h5>Datos insertados correctamente</h5>';
+    	}
+    }
+    
+    public function updateData($id,$mes,$any,$edifici,$planta,$ampolles){
+    	$temporada      = intval($any);
+    	$id_edifici 	= $edifici;
+    	$planta_edifici = intval($planta);
+    	$id_preu        = 4;
+    	$num_ampolles   = intval($ampolles);
+    	
+    	$cmd = 'UPDATE pspv_schema.'.$this->table_name.' SET 	mes = \''.$mes.'\', temporada = '.$temporada.',
+																id_edifici = \''.$id_edifici.'\', planta_edifici = '.$planta_edifici.',
+																id_preu = '.$id_preu.', num_botellas = '.$num_ampolles.'
+				WHERE id = \''.$id.'\';';
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos de  no fueron insertados: ". pg_last_error($this->connection)." Fecha: ".$GLOBALS['date']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);
+    		
+    		
+    	}else{
+    		echo '<h5>Datos insertados correctamente</h5>';
+    	}
+    }
+    
+    public function updateShowForms($id,$mes,$any,$edifici,$planta,$ampolles){
+    	echo '
+			<script type="txt/javascript">
+				$(document).ready(function (){
+ 					$("#btnOxiflow").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var edifici = $("#edifici").val();
+  						var ampolles = $("#ampolles").val();
+						var planta = $("#planta").val();
+ 						var tipo = "Oxigen Ampolles";
+						var id = '.$id.';
+
+    			
+ 						$.ajax({
+								   type: "POST",
+								   data: {id:id,mes:mes,any:any,edifici:edifici,ampolles:ampolles,planta:planta,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/updateData.php",
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+ 				});
+    			
+			</script>
+    			
+			<div  class="col-md-12" id="contenedorOxiflow">
+				<h3 id="cabecera-formulario">Actualització Oxiflow Ampolles '.$edifici.'</h3>
+					<form role="form"  name="form-oxiflw" method="POST">
+					    <div class="col-md-12 col">
+					        <div class="form-group">
+								<div class="col-md-8 col">
+									<div class="col-md-4 col">
+										<h4>Mes</h4>
+				   						<input class="form-control" id="selmes" type="text" name="MEs" value="'.$mes.'" required="required">
+
+									</div>
+									<div class="col-md-4 col">
+										<h4>Any</h4>
+											<input class="form-control" id="selany" type="number" name="anyo" min="2022" max="2030" value="'.$any.'" required="required">
+									</div>
+								</div>
+								<div class="col-md-10 col">
+									<div class="col-md-5 col">
+					   					<h4>Edifici</h4>
+				   						<input class="form-control" id="edifici" type="text" name="Edifici" value="'.$edifici.'" required="required">
+									</div>
+									<div class="col-md-5 col">
+				   						<h4>Planta</h4>
+				   							<input class="form-control" id="planta" type="number" name="plantao" min="1" max="5" value="'.$planta.'">
+									</div>
+								</div>
+								<div class="col-md-10 col">
+									<div class="col-md-5 col">
+				   						<h4>Ampolles</h4>
+				   						<input class="form-control" id="ampolles" type="number" name="consumo" required="required" value="'.$ampolles.'">
+									</div>
+									<br>
+									<br>
+									<br>
+									<div class="col-md-5 col">
+										<input  class="form-control btn btn-primary" id="btnOxiflow" name="submit" value="Enviar dades" style="margin:2%;">
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+    			
+			<div class="col-md-8 col" id="responseInsert"></div>';
+    }
+    
+    public function showForm(){
+    	echo '
+			<script type="txt/javascript">
+				$(document).ready(function (){
+ 					$("#btnOxiflow").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var edifici = $("#edifici").val();
+  						var ampolles = $("#ampolles").val();
+						var planta = $("#planta").val();
+ 						var tipo = "Oxiflow";
+
+ 						$.ajax({
+								   type: "POST",
+								   data: {mes:mes,any:any,edifici:edifici,ampolles:ampolles,planta:planta,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/insertData.php",								      						      
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+ 				});
+          							 
+			</script>
+
+			<div  class="col-md-12" id="contenedorOxiflow">
+				<h3 id="cabecera-formulario">Inserció de dades en el formulario Oxiflow Ampolles</h3>
+					<form role="form"  name="form-oxiflw" method="POST">			
+					    <div class="col-md-12 col">
+					        <div class="form-group">
+								<div class="col-md-8 col">
+									<div class="col-md-4 col">
+										<h4>Mes</h4>
+						   					<select class="form-control" id="selmes" name="mesoso" required="required" >
+											    <option>Gener</option>
+											    <option>Febrer</option>
+											    <option>Març</option>
+											    <option>Abril</option>
+											    <option>Maig</option>
+											    <option>Juny</option>
+											    <option>Juliol</option>
+											    <option>Agost</option>
+											    <option>Septembre</option>
+											    <option>Octubre</option>
+											    <option>Novembre</option>
+											    <option>Decembre</option>
+										  	</select>
+									</div>
+									<div class="col-md-4 col">
+										<h4>Any</h4>
+											<input class="form-control" id="selany" type="number" name="anyo" min="2022" max="2030" required="required">
+									</div>
+								</div>
+								<div class="col-md-10 col">
+									<div class="col-md-5 col">
+					   					<h4>Selecció d´ edifici</h4>
+					   						<select class="form-control" id="edifici" name="edificio" required="required">
+					   							<option>Gregal</option>
+					   							<option>Xaloc</option>
+					   							<option>Llevant</option>
+					   						</select>
+									</div>
+									<div class="col-md-5 col">
+				   						<h4>Selecció de planta</h4>
+				   							<input class="form-control" id="planta" type="number" name="plantao" min="1" max="5">
+									</div>
+								</div>
+								<div class="col-md-10 col">
+									<div class="col-md-5 col">
+				   						<h4>Nombre d´ ampolles consumides</h4>
+				   							<input class="form-control" id="ampolles" type="number" name="consumo" required="required">
+									</div>
+									<br>
+									<br>
+									<br>
+									<div class="col-md-5 col">
+										<input  class="form-control btn btn-primary" id="btnOxiflow" name="submit" value="Enviar dades" style="margin:2%;">
+									</div>										
+								</div>
+							</div>														
+						</div>
+					</form>
+				</div>
+		
+			<div class="col-md-8 col" id="responseInsert"></div>';
+    	$this->last_insert();
+    }
 }
+
+?>

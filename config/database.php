@@ -12,11 +12,11 @@ include '../config/core.php';
 
 class Database{
     //Credentials for connection
-    private $host = "localhost";
-    private $db_name = "";
+    private $host = "127.0.0.1";
+    private $db_name = "pspv_db";
     private $db_port = "5432";
-    private $db_user = "";
-    private $db_pass = "";
+    private $db_user = "rom_pspv";
+    private $db_pass = "R458V90Rcxa3389563";
     private $connection = "";
     public $conn;
     
@@ -47,8 +47,8 @@ class Database{
             print "<h2 style=\"color:red;\">".$msg."</h2>";
         }
         
-        $check2 = pg_get_result($this->conn);
-        echo pg_result_error($check2);
+        // $check2 = pg_get_result($this->conn);
+        // echo pg_result_error($check2);
         
         $check3 = pg_connection_status($this->conn);
         if ($check3 === PGSQL_CONNECTION_OK){

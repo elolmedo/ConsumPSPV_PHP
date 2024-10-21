@@ -6,16 +6,18 @@
 #
 ###
  
- require 'functions.php';
+ require 'globals.php';
+ require 'database.php';
+ require 'core.php';
  
  //Conexión, consultas e inserciones
- $db = connectDb() or die(pg_last_error());
+ $database = new Database();
+ $db = $database->getConnection();
 
-
- $usernick      = "";
- $username      = "":w;
- $userpassword  = "";
- $usermail      = "";
+ $usernick      = "oguerrero";
+ $username      = "Boss Bayona";
+ $userpassword  = "5325csd$$";
+ $usermail      = "oguerrero@perevirgili.cat";
 
  define('Session Email',$usermail);
  

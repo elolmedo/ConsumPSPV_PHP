@@ -9,41 +9,48 @@
     
     require '../config/database.php';
     require '../config/core.php';
+        
+    $consumo = $_REQUEST["lastinserts"];
+    $edifici = $_REQUEST["edifici"];
     
-    
-    $consumo = $_GET["lastinserts"];
     
     $database = new Database();
     $db = $database->getConnection();
     
     if ($consumo ==  "Gas Natural"){
-        
-        print "<div radio radio-inline class=\"col-md-12\">";        
-            $gasNatural = new GasNatural($db);
-            $gasNatural->lastinsert($consumo);       
-        print "</div>";
-        
+    	$gasNatural = new GasNatural($db);
+    	if($edifici == "TRA"){    		
+    		$gasNatural->lastInsertDT_TRA();
+    	}elseif($edifici == "GRE"){
+    		$gasNatural->lastInsertDT_GRE();
+    	}elseif($edifici == "XAL"){
+    		$gasNatural->lastInsertDT_XAL();
+    	}elseif($edifici == "PUI"){
+    		$gasNatural->lastInsertDT_PUI();
+    	}elseif($edifici == "SUP"){
+    		$gasNatural->lastInsertDT_SUP();
+    	}
+              
     } elseif ($consumo == "Oxigen Ampolles") {
-        
-        print "<div radio radio-inline class=\"col-md-12\">";
-            $oxigenAmpolla = new OxigenAmpolles($db);
-            $oxigenAmpolla->last_insert($consumo);    
-        print "</div>";
+    	$oxigenAmpolla = new OxigenAmpolles($db);    	
+    	if($edifici == "GRE"){
+    		$oxigenAmpolla->lastInsertDT_GRE();
+    	}elseif ($edifici == "XAL"){
+    		$oxigenAmpolla->lastInsertDT_XAL();    		    		
+    	}elseif ($edifici == "LLE"){
+    		$oxigenAmpolla->lastInsertDT_LLE();    		
+    	}
         
     } elseif ($consumo == "Oxigen") {
-        
-        $oxigenTank = new OxigenTank($db);
-        $oxigenTank->last_insert($consumo);
-        
-    } elseif ($consumo == "Electricitat") {
-        
+    	$oxigenTank = new OxigenTank($db);
+        $oxigenTank->lastInsertDT();       
+    } elseif ($consumo == "Electricitat") {        
         $electricitat = new Electricitat($db);
-        $electricitat->last_insert();
+		$electricitat->lastInsertDT();
         
-    } elseif ($consumo == "Aigua"){
-        
+    } elseif ($consumo == "Aigua"){        
         $aigua = new Aigua($db);
-        $aigua->last_insert();
+        $aigua->lastInsertDT();        
         
     } else {
         

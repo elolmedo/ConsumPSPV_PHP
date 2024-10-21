@@ -26,10 +26,33 @@ class OxigenTank{
         $this->connection = $db;
     }
     
-    public function last_insert($consumo){
+    public function lastInsertDT(){
+    	$data = array();
+    	$sql = "	SELECT id,temporada,mes,consum_tank,id_preu FROM pspv_schema.".$this->table_name."
+				    ORDER BY id DESC
+				    LIMIT 10";
+    	
+    	$result = pg_query($sql);
+    	
+    	while ($row = pg_fetch_assoc($result)) {    		
+    		$arrayEdifici = array(
+    				"Id" => $row['id'],
+    				"Temporada" => $row['temporada'],
+    				"Mes" => $row['mes'],
+    				"ConsumTank" => $row['consum_tank'],
+    				"IdPreu" => $row['id_preu'],
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	$arrayGas["Oxigen"] = "";
+    	$arrayGas["Oxigen"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    }
+    
+    public function last_insert(){
         $sql = "	SELECT id,temporada,mes,consum_tank,id_preu FROM pspv_schema.".$this->table_name."
 				    ORDER BY id DESC
-				    LIMIT 3";
+				    LIMIT 10";
         
         $result = pg_query($sql);
         
@@ -140,6 +163,8 @@ class OxigenTank{
     
     public function dataConsumToArrayGraph($temporada,$consumo){
         
+    	error_reporting(0);
+    	
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
@@ -170,18 +195,19 @@ class OxigenTank{
         }
         
         // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 		= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost			= pg_fetch_result($result,4,2);
-        $juliol			= pg_fetch_result($result,5,2);
-        $juny			= pg_fetch_result($result,6,2);
-        $maig			= pg_fetch_result($result,7,2);
-        $abril			= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener			= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
+        
         
         $arr[$temporada] = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
@@ -191,6 +217,8 @@ class OxigenTank{
 
     public function dataCostToArrayGraph($temporada,$consumo){
         
+    	error_reporting(0);
+    	
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
@@ -201,7 +229,7 @@ class OxigenTank{
                             FROM pspv_schema.";
         $pre_relation = ", pspv_schema.conversio_preus p";
         $pre_group = "  GROUP BY 1,2,3
-        				        ORDER BY mes='Gener',mes='Febrer',mes='Març',mes='Abril',mes='Maig',mes='Juny',mes='Juliol',mes='Agost',mes='Septembre',mes='Octubre',mes='Novembre',mes='Decembre';";
+        				        ORDER BY mes='Decembre', mes='Novembre',mes='Octubre', mes='Septembre', mes='Agost', mes='Juliol', mes='Juny',mes='Maig',mes='Abril',mes='Març',mes='Febrer',mes='Gener';";
         $pre_where = " WHERE id_preu = p.id";
         $post_where = " AND temporada = ";
         
@@ -228,18 +256,30 @@ class OxigenTank{
         }
         
         // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 		= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost			= pg_fetch_result($result,4,2);
-        $juliol			= pg_fetch_result($result,5,2);
-        $juny			= pg_fetch_result($result,6,2);
-        $maig			= pg_fetch_result($result,7,2);
-        $abril			= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener			= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
+//         $decembre 	= pg_fetch_result($result,0,2);
+//         $novembre 	= pg_fetch_result($result,1,2);
+//         $octubre 		= pg_fetch_result($result,2,2);
+//         $septembre	= pg_fetch_result($result,3,2);
+//         $agost			= pg_fetch_result($result,4,2);
+//         $juliol			= pg_fetch_result($result,5,2);
+//         $juny			= pg_fetch_result($result,6,2);
+//         $maig			= pg_fetch_result($result,7,2);
+//         $abril			= pg_fetch_result($result,8,2);
+//         $marzo		= pg_fetch_result($result,9,2);
+//         $febrer		= pg_fetch_result($result,10,2);
+//         $gener			= pg_fetch_result($result,11,2);
         
         $arr[$temporada] = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
@@ -307,7 +347,7 @@ class OxigenTank{
     
     public function createBackupTable(){
         echo '<p>Procedemos a la copia de la Tabla: '.$this->table_name.'</p>'."\n";
-        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$tabla_consumo.'.sql --table pspv_schema.'.$tabla_consumo.' pspv_db 2>&1';
+        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$this->table_name.'.sql --table pspv_schema.'.$this->table_name.' pspv_db 2>&1';
         
         $salida = system($cmd,$retval);
         
@@ -357,13 +397,15 @@ class OxigenTank{
             $consum_tank    = floatval($val['Consum_Tank']);
             $id_preu        = intval($val['id_preu']);
             
-            $cmd = 'INSERT INTO pspv_schema.'.$this->table_name.'(mes,temporada,consum_tank,id_preu) ';
+            $cmd = 'INSERT INTO pspv_schema.'.$this->table_name.' (mes,temporada,consum_tank,id_preu) ';
             $cmd .= 'VALUES (\''.$mes.'\','.$temporada.','.$consum_tank.','.$id_preu.');';
             
-            $res = pg_query($db,$cmd);
+            echo $cmd;
+            
+            $res = pg_query($cmd);
             
             if(!$res){
-                $msg = "[ERR] Fallo: los datos no fueron insertados: ". pg_last_error($this->connection)." Fecha :".$GLOBALS['fecha']."\n";
+                $msg = "[ERR] Fallo: los datos no fueron insertados: ". pg_last_error()." Fecha :".$GLOBALS['fecha']."\n";
                 errorLog($msg);
                 
                 echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
@@ -375,9 +417,207 @@ class OxigenTank{
                 die($msg);
                 
                 
+            }else{
+            	echo '<h5>Datos insertados correctamente</h5>';
             }
         }
-        echo '<p id="OK">Dades insertades correctament'."\n";
-        pg_close($this->connection);
+       
+    }
+    
+    public function showUpdateForm($id,$mes,$any,$consumTank,$preu){
+    	echo '
+			<script type="txt/javascript">
+    			
+				$(document).ready(function (){
+    			
+ 					$("#btnTank").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var p1 = $("#p1").val();
+  						var preu = 	$("#preu").val();
+ 						var tipo = "Oxigen";
+						var id = '.$id.';	
+
+  						$.ajax({
+ 								   type: "POST",
+ 								   data: {id:id,mes:mes,temporada:any,p1:p1,preu:preu,tipo:tipo},
+       						       url: "../Ajax_Reception_PHP/updateData.php",
+       						       success: function(msg){
+       						           $("#responseInsert").html(msg);
+       						       }
+       					});
+ 					});
+ 				});
+    			
+			</script>
+			<div class="col-md-12" id="contenedorOxiflowtank">
+				<h3 id="cabecera-formulario">Actualització de dades Oxiflow Tank</h3>
+					<form role="form"  name="form-oxiflw-tank" method="POST">
+					    <div class="col-md-12 col" style="margin-left: auto; margin-right: auto;">
+					        <div class="form-group">
+								<div class="col-md-8 col">
+                                    <div class="col-md-4 col">
+										<h4>Id</h4>
+				   						<input class="form-control" id="selmes" type="text" name="MEs" value="'.$id.'" required="required">
+									</div>
+									<div class="col-md-4 col">
+										<h4>Mes</h4>
+				   						<input class="form-control" id="selmes" type="text" name="MEs" value="'.$mes.'" required="required">
+									</div>
+									<div class="col-md-4 col">
+										<h4>Any</h4>
+											<input class="form-control" type="number" id="selany" name="selany" min="2022" max="2030" value="'.$any.'" required="required">
+									</div>
+								</div>
+								<div class="col-md-8 col">
+									<div class="col-md-4 col">
+				   						<h4>Nombre  total de metres cubics</h4>
+				   							<input class="form-control" id="p1" type="float" name="consumtank" value="'.$consumTank.'">
+									</div>
+									<div class="col-md-4 col">
+					   				<h4>Nº Identificació Preu</h4>
+					   					<input class="form-control" id="preu" type="number" name="id_preu" min="1" max="10" required="required" value="'.$preu.'">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8 col">
+								<input class="form-control btn btn-primary" id="btnTank" name="submit" value="Enviar dades">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-8 col" id="responseInsert"></div>
+		';
+    	
+    }
+    
+    public function showForm(){
+    	echo '
+			<script type="txt/javascript">
+ 				
+				$(document).ready(function (){
+
+ 					$("#btnTank").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var p1 = $("#p1").val();
+  						var preu = 	$("#preu").val(); 						
+ 						var tipo = "OxigenTank";
+ 						$.ajax({
+								   type: "POST",
+								   data: {mes:mes,any:any,p1:p1,preu:preu,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/insertData.php",								      						      
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+ 				});
+          							 
+			</script>
+			<div class="col-md-12" id="contenedorOxiflowtank">
+				<h3 id="cabecera-formulario">Inserció de dades en el formulari Oxiflow Tank</h3>
+					<form role="form"  name="form-oxiflw-tank" method="POST">
+					    <div class="col-md-12 col">
+					        <div class="form-group">
+								<div class="col-md-8 col">
+									<div class="col-md-4 col">
+										<h4>Mes</h4>
+						   					<select class="form-control" id="selmes" name="mesosoT" required="required" >
+											    <option>Gener</option>
+											    <option>Febrer</option>
+											    <option>Març</option>
+											    <option>Abril</option>
+											    <option>Maig</option>
+											    <option>Juny</option>
+											    <option>Juliol</option>
+											    <option>Agost</option>
+											    <option>Septembre</option>
+											    <option>Octubre</option>
+											    <option>Novembre</option>
+											    <option>Decembre</option>
+										  </select>
+									</div>
+									<div class="col-md-4 col">
+										<h4>Any</h4>
+											<input class="form-control" type="number" id="selany" name="selany" min="2022" max="2030" required="required">
+									</div>
+								</div>
+								<div class="col-md-8 col">
+									<div class="col-md-4 col">
+				   						<h4>Nombre  total de metres cubics</h4>
+				   							<input class="form-control" id="p1" type="float" name="consumtank">
+									</div>
+									<div class="col-md-4 col">
+					   				<h4>Nº Identificació Preu</h4>
+					   					<input class="form-control" id="preu" type="number" name="id_preu" min="1" max="10" required="required" value="5">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8 col">
+								<input class="form-control btn btn-primary" id="btnTank" name="submit" value="Enviar dades" style="margin: 2%;">
+							</div>							
+						</div>
+					</form>
+				</div>
+				<div class="col-md-8 col" id="responseInsert"></div>
+		';
+    	$this->last_insert();
+    }
+    
+    public function updatedData($id,$mes,$any,$consumTank,$preu){
+    	
+    	$temporada      = intval($any);
+    	$consum_tank    = floatval($consumTank);
+    	$id_preu        = intval($preu);
+    	 
+    	$cmd = 'UPDATE pspv_schema.'.$this->table_name.'  SET 	Id = \''.$id.'\',mes = \''.$mes.'\', temporada = \''.$temporada.'\',
+																consum_tank = \''.$consum_tank.'\', id_preu  = \''.$id_preu.'\'
+				WHERE id = \''.$id.'\';'; 
+
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos no fueron insertados: ". pg_last_error()." Fecha :".$GLOBALS['fecha']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);	
+    	}else{
+    		echo '<h5>Datos insertados correctamente</h5>';
+    	}
+    }
+    
+    public function insertOneData($mes,$any,$p1,$preu){
+    	$temporada      = intval($any);
+    	$consum_tank    = floatval($p1);
+    	$id_preu        = intval($preu);
+    	
+    	$cmd = 'INSERT INTO pspv_schema.'.$this->table_name.' (mes,temporada,consum_tank,id_preu) ';
+    	$cmd .= 'VALUES (\''.$mes.'\','.$temporada.','.$consum_tank.','.$id_preu.');';
+    	    	
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos no fueron insertados: ". pg_last_error()." Fecha :".$GLOBALS['fecha']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);
+    		
+    		
+    	}else{
+    		echo '<h5>Datos insertados correctamente</h5>';
+    	}
     }
 }

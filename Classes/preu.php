@@ -16,7 +16,6 @@ class Preu{
     private $table_name = "conversio_preus";
     
     //Propierties
-    public $id;
     public $tipus;
     public $consum;
     public $cantitat;
@@ -25,30 +24,6 @@ class Preu{
     //Constructor
     public function __construct($db){
         $this->connection = $db;
-    }
-    
-    public function createCSVFile($result){
-        
-        try {
-            $pathfile = "/var/www/ConsumsPSPV/CSV/file_conversio_preus.csv";
-            $file = fopen($pathfile,"w");
-            
-        }catch(Exception $e){
-            $msg = "[ERR] Fallo al crear el fichero de consumo";
-            errorLog($msg);
-        }
-        
-        echo '<h6>Creació del fitxer de conversió de preus</h6>';
-        $cabecera = "Id,Tipus,Consum,Cantitat,Descripció";
-        fwrite($file, $cabecera);
-        
-        while($row = pg_fetch_assoc($result)){
-            $string = $row['id'].",".$row['tipus'].",".$row['consum'].",".$row['cantitat'].",".$row['descripcio'];
-            fwrite($file, $string);
-        }
-        
-        print '<a href="CSV/file_conversio_preus.csv" class="btn btn-primary" role="button"><h4>Descarrega Fitxer Preus</h4></a>';
-        fclose($file);
     }
     
     public function showLastPreus(){
@@ -82,7 +57,6 @@ class Preu{
             print "</tr>\n\n";
         } // fin while
         print "</table>\n";
-        $this->createCSVFile($result);
-        
+       // print "<a href=\"Ajax_Reception_PHP/form_preu.php\" class='btn btn-primary' role='button'><h4>Insertar nou preu</h4></a>";
     }       
 }

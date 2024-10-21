@@ -40,14 +40,16 @@
 	}elseif ($tipo == "Aigua"){
 	    $aigua = new Aigua($db);
 	    $pathfile = $aigua->generateCSVFile($tipo);
-	    
+	    	    
 	}elseif ($tipo == "Gas Natural"){
 	    $gasnatural    = new GasNatural($db);
-	    $pathfile      = $gasnatural->generateCSVFile($tipo);
+	    $pathfile      = $gasnatural->generateCSVFile($tipo);	    
+	    
 	    
 	}elseif ($tipo == "Oxigen"){
 	    $oxigenTank    = new OxigenTank($db);
 	    $pathfile      = $oxigenTank->generateCSVFile($tipo);
+	    
 	    
 	}elseif ($tipo == "Oxigen Ampolles"){
 	    $oxigenAmpolla = new OxigenAmpolles($db);
@@ -56,6 +58,7 @@
 	
 	// check if file exist in server
 	if(file_exists($pathfile)) {
+		
 	    //Generamos el menú para poder descargarse el fichero con los datos según consumo.
 	    generateMenuDownloadFile($tipo);
 	    echo '</div>'."\n";

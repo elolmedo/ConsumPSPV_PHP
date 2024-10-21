@@ -203,19 +203,10 @@
 
             <div id="section4">
                 <h1>Insercions</h1>
-                <p>Hem actualizat la forma d'inserció dels consums a la base de dades. Ara triem un consum i es desplega automàticament dos menus</p>
-                <ul>
-                	<li>Descarrrega de fitxer</li>
-                	<li>Pujada de dades</li>
-                </ul>
-                <h4>Descarregá de fitxer</h4>
-                	<p>Tenim dues possibilitats, descarregar-lo en format CSV per actualizar les dades, es l'unic format que acceptaŕa el següent pas.</p>
-                	<p>La segona possibilitat descarregar-lo en formart Excel per la visualització de dades.</p>
-                <h4>Pujada de dades</h4>
-                	<p>Aquest menú en facilita la pujada del fitxer en format CSV. Només acceptará aquest format i amb el nom indicat. El nom del fitxer i el consum</p>
-                	<p>están relacionats, de tal forma qué només poden pujar el fitxer exacta. Si el fitxer es més petit o igual que l'anterior no es pot pujar.</p>
+                <p>A l apartat insercions tenim tots el formularis per introduir les nostres mesures de suministres, alguns d aquests
+                incorporen un boto per poder crear un nou preu, ja sigui per Gas Natural, oxigen ampolles o oxigen tank</p>
                 <h2>Insercio nou preu</h2>
-                <p>Depenent del consum seleccionat, apareixerà el botó y la tabla Preus. Podemo veure els preus que hi ha almacenats a la BD e insertar un nou preu</p>
+                <p>Una vegada en pulsat el boto de insertar nou preu, accedim a un nou formulari amb el seguents camps:</p>
                 <ul>
                     <li>Tipus: Actualment nomes pot ser PREU</li>
                     <li>Consum: Gas Natural, Oxigen Tank o Oxiflow ampolles </li>
@@ -226,7 +217,7 @@
                 <p>Despres de fer la insercion de la nova dada, ja la podrem visualitzar i utilizar mitjanaçant el seu id</p>
 
                 <h2>A tenir en compte</h2>
-                <p>Tots els camps del fitxers han de ser rellenats, en cas de no tenir ningu valor a introduir posarem un 0/p>
+                <p>Tots els camps del formularis han de ser rellenats, en cas de no tenir ningu valor a introduir posarem un 0/p>
             </div>
             <div id="section5">
                 <h1>Ultimes Insercions</h1>
@@ -235,7 +226,7 @@
             <div id="section6">
                 <h1>Contacte</h1>
                 <h2>RomSolutions</h2>
-                <p>Raul Olmedo</p>z
+                <p>Raul Olmedo</p>
                 <a mailto="raulolmedom@gmail.com"><p>raulolmedom@gmail.com</p></a>
                 <p>telf. 609520548</p>
             </div>

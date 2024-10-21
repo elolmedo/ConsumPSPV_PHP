@@ -230,8 +230,8 @@ function CreateGraph1(){
         contentType: false,        
     }).responseText;
     
-    //alert(jsonData);
-    
+	console.log(jsonData)
+	 
     google.charts.load('current', {'packages':['corechart']});
     
     jsonData = JSON.parse(jsonData);
@@ -372,7 +372,7 @@ function CreateGraph2(){
             url:"/Ajax_Reception_PHP/TotalesGraphsPSPV.php?tipo="+tipo+"&consumo="+consumo+"&edifici="+edifici+"&temporadas="+temporadasSeleccionadas,
             type: "POST",
             data: tipo, consumo,temporadasSeleccionadas,edifici,
-            dataType: "json",
+            dataType: "JSON",
             async: false,        
             processData: false,
             contentType: false,           
@@ -535,9 +535,8 @@ function CreateGraph2(){
             contentType: false,
             
         }).responseText;
-    	
-        //alert(jsonData);
 
+    	
     	
     	google.charts.load('current', {'packages':['corechart']});
         
@@ -781,3 +780,25 @@ function lastinsterts(){
         xmlhttp.send();
     }
 }
+
+function showForms(){
+		var tipo = $('#sel_tipus_insercio') .val();
+		if (tipo == ""){
+			alert("Error no se ha seleccionado ningún tipo de consumo");		
+		}else{
+			$.post({
+			       url: "../Ajax_Reception_PHP/ajaxforms.php?tipo="+tipo,
+			       type: "POST",
+			       dataType: "HTML",
+			       cache: false,
+			       contentType: false,
+			       processData: false,
+			       success: function(data){
+			           $('#divforms').html(data);
+			       }
+			   });
+		}
+	}
+
+
+

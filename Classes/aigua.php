@@ -9,6 +9,8 @@
 
 include '../config/core.php';
 include '../config/globals.php';
+include '../Classes/preu.php';
+
 
 class Aigua{
     
@@ -27,13 +29,43 @@ class Aigua{
     public function __construct($db){
         $this->connection = $db;
     }
+    
+    public function lastInsertDT(){
+    	$data = array();
+    	$sql = "
+                    SELECT id,temporada,mes,consum_tram1,consum_tram2,consum_tram3,totalf
+	                FROM pspv_schema.".$this->table_name."
+				    ORDER BY id desc
+				    LIMIT 10
+				";
+    	
+    	$result = pg_query($sql);
+    	while ($row = pg_fetch_assoc($result)) {
+    		$arrayEdifici = array(
+    				"Id" => $row['id'],
+    				"Temporada" => $row['temporada'],
+    				"Mes" => $row['mes'],
+    				"Tram1" => $row['consum_tram1'],
+    				"Tram2" => $row['consum_tram2'],
+    				"Tram3" => $row['consum_tram3'],    				
+    				"TotalFactura" => $row['totalf'],
+    		);
+    		array_push($data,$arrayEdifici);
+    	}
+    	
+    	$arrayGas["Aigua"] = "";
+    	$arrayGas["Aigua"] = $data;
+    	echo json_encode($arrayGas,JSON_PRETTY_PRINT);
+    	
+    }
+    
 
     public function last_insert(){
         $sql = "	
                     SELECT id,temporada,mes,consum_tram1,consum_tram2,consum_tram3,totalf
 	                FROM pspv_schema.".$this->table_name."
 				    ORDER BY id desc
-				    LIMIT 3
+				    LIMIT 10
 				";
         
         $result = pg_query($sql);
@@ -150,6 +182,7 @@ class Aigua{
 
     public function dataConsumToArrayGraph($temporada,$consumo){
         
+    	error_reporting(0);
         
         $pre_sql = "";
         $pre_group = "";
@@ -158,7 +191,7 @@ class Aigua{
         $pre_sql = "SELECT temporada,mes,SUM(consum_tram1+consum_tram2+consum_tram3)
                     FROM pspv_schema.";
         $pre_group = "  GROUP BY 1,2
-        				        ORDER BY mes='Gener',mes='Febrer',mes='Març',mes='Abril',mes='Maig',mes='Juny',mes='Juliol',mes='Agost',mes='Septembre',mes='Octubre',mes='Novembre',mes='Decembre';";
+        				        ORDER BY mes='Decembre', mes='Novembre',mes='Octubre', mes='Septembre', mes='Agost', mes='Juliol', mes='Juny',mes='Maig',mes='Abril',mes='Març',mes='Febrer',mes='Gener';";
         $pre_where = " WHERE temporada = ";
         
         $sql = "";
@@ -182,18 +215,31 @@ class Aigua{
         }
         
         // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 		= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost			= pg_fetch_result($result,4,2);
-        $juliol			= pg_fetch_result($result,5,2);
-        $juny			= pg_fetch_result($result,6,2);
-        $maig			= pg_fetch_result($result,7,2);
-        $abril			= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener			= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
+//         $decembre 	= pg_fetch_result($result,0,2);
+//         $novembre 	= pg_fetch_result($result,1,2);
+//         $octubre 		= pg_fetch_result($result,2,2);
+//         $septembre	= pg_fetch_result($result,3,2);
+//         $agost			= pg_fetch_result($result,4,2);
+//         $juliol			= pg_fetch_result($result,5,2);
+//         $juny			= pg_fetch_result($result,6,2);
+//         $maig			= pg_fetch_result($result,7,2);
+//         $abril			= pg_fetch_result($result,8,2);
+//         $marzo		= pg_fetch_result($result,9,2);
+//         $febrer		= pg_fetch_result($result,10,2);
+//         $gener			= pg_fetch_result($result,11,2);
+
         
         $arr[$temporada] = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
@@ -201,7 +247,7 @@ class Aigua{
     }
     
     public function dataCostToArrayGraph($temporada,$consumo){
-        
+        error_reporting(0);
         $pre_sql = "";
         $pre_group = "";
         $pre_where = "";
@@ -209,7 +255,7 @@ class Aigua{
         $pre_sql = "SELECT temporada,mes,SUM(totalf)/SUM(consum_tram1+consum_tram2+consum_tram3)
                             FROM pspv_schema.";
         $pre_group =  " GROUP BY 1,2
-                                ORDER BY mes='Gener',mes='Febrer',mes='Març',mes='Abril',mes='Maig',mes='Juny',mes='Juliol',mes='Agost',mes='Septembre',mes='Octubre',mes='Novembre',mes='Decembre';";
+        				        ORDER BY mes='Decembre', mes='Novembre',mes='Octubre', mes='Septembre', mes='Agost', mes='Juliol', mes='Juny',mes='Maig',mes='Abril',mes='Març',mes='Febrer',mes='Gener';";
         $pre_where = " WHERE temporada = ";
         
         $sql = "";
@@ -233,18 +279,30 @@ class Aigua{
         }
         
         // Asignación de los PMP del Aigua del 2014
-        $decembre 	= pg_fetch_result($result,0,2);
-        $novembre 	= pg_fetch_result($result,1,2);
-        $octubre 		= pg_fetch_result($result,2,2);
-        $septembre	= pg_fetch_result($result,3,2);
-        $agost			= pg_fetch_result($result,4,2);
-        $juliol			= pg_fetch_result($result,5,2);
-        $juny			= pg_fetch_result($result,6,2);
-        $maig			= pg_fetch_result($result,7,2);
-        $abril			= pg_fetch_result($result,8,2);
-        $marzo		= pg_fetch_result($result,9,2);
-        $febrer		= pg_fetch_result($result,10,2);
-        $gener			= pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,11,2)) ? $decembre = 0 : $decembre = pg_fetch_result($result,11,2);
+        empty(pg_fetch_result($result,10,2)) ? $novembre = 0 : $novembre = pg_fetch_result($result,10,2);
+        empty(pg_fetch_result($result,9,2)) ? $octubre = 0 : $octubre = pg_fetch_result($result,9,2);
+        empty(pg_fetch_result($result,8,2)) ? $septembre = 0 : $septembre = pg_fetch_result($result,8,2);
+        empty(pg_fetch_result($result,7,2)) ? $agost = 0 : $agost = pg_fetch_result($result,7,2);
+        empty(pg_fetch_result($result,6,2)) ? $juliol = 0 : $juliol = pg_fetch_result($result,6,2);
+        empty(pg_fetch_result($result,5,2)) ? $juny = 0 : $juny = pg_fetch_result($result,5,2);
+        empty(pg_fetch_result($result,4,2)) ? $maig = 0 : $maig = pg_fetch_result($result,4,2);
+        empty(pg_fetch_result($result,3,2)) ? $abril = 0 : $abril = pg_fetch_result($result,3,2);
+        empty(pg_fetch_result($result,2,2)) ? $marzo = 0 : $marzo = pg_fetch_result($result,2,2);
+        empty(pg_fetch_result($result,1,2)) ? $febrer = 0 : $febrer = pg_fetch_result($result,1,2);
+        empty(pg_fetch_result($result,0,2)) ? $gener = 0 : $gener = pg_fetch_result($result,0,2);
+//         $decembre 	= pg_fetch_result($result,0,2);
+//         $novembre 	= pg_fetch_result($result,1,2);
+//         $octubre 		= pg_fetch_result($result,2,2);
+//         $septembre	= pg_fetch_result($result,3,2);
+//         $agost			= pg_fetch_result($result,4,2);
+//         $juliol			= pg_fetch_result($result,5,2);
+//         $juny			= pg_fetch_result($result,6,2);
+//         $maig			= pg_fetch_result($result,7,2);
+//         $abril			= pg_fetch_result($result,8,2);
+//         $marzo		= pg_fetch_result($result,9,2);
+//         $febrer		= pg_fetch_result($result,10,2);
+//         $gener			= pg_fetch_result($result,11,2);
         
         $arr[$temporada] = array($gener,$febrer,$marzo,$abril,$maig,$juny,$juliol,$agost,$septembre,$octubre,$novembre,$decembre);
         return $arr;
@@ -253,6 +311,7 @@ class Aigua{
     }
     
     public function generateCSVFile($tipo){
+    	
         
         $sql = "SELECT * FROM pspv_schema.".$this->table_name.";";
         
@@ -264,10 +323,15 @@ class Aigua{
         try{
             //Creamos Path hacia el fichero a crear según el tipo de consumo
             $pathfile = createCSVConsum($tipo);
-            $fichero = fopen($pathfile,"w");
+            try{
+            	$fichero = fopen($pathfile,"w");
+            }catch (ErrorException $a){
+            	$msg = "[ERR] Fallo al abrir el fichero Agua con los datos actuales:  ".$a->getMessage();
+            	errorLog($msg);
+            }            
             
         }catch(Exception $e){
-            $msg = "[ERR] Fallo al crear el fichero con los datos actuales:  ".$e;
+            $msg = "[ERR] Fallo al crear el fichero Agua con los datos actuales:  ".$e->getMessage();
             errorLog($msg);
         }
         
@@ -283,6 +347,8 @@ class Aigua{
         
         echo '<h6>Fitxer Terminat: '.$tipo.'</h6>';
         fclose($fichero);
+        return $pathfile;
+        
     }
     public function comprobateLengthData($newfile){
         
@@ -311,15 +377,22 @@ class Aigua{
     
     public function createBackupTable(){
         echo '<p>Procedemos a la copia de la Tabla: '.$this->table_name.'</p>'."\n";
-        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$tabla_consumo.'.sql --table pspv_schema.'.$tabla_consumo.' pspv_db 2>&1';
+        $cmd = 'PGPASSWORD="R458V90Rcxa3389563" pg_dump --host localhost --port 5432 --username rom_pspv --data-only --format plain --verbose --file /var/www/ConsumsPSPV/CSV/oldData/copia_'.$this->table_name.'.sql --table pspv_schema.'.$this->table_name.' pspv_db 2>&1';
         
-        $salida = system($cmd,$retval);
-        
-        if ($retval != 0){
-            $msg = "[ERR] Fallo al crear el backup de la tabla: ".$this->table_name." Fecha: " .$GLOBALS['date']."\n";
-            errorLog($msg);
-            die($msg);
+        try{
+        	$salida = system($cmd,$retval);
+        }catch(ErrorException $e){
+        	$msg = "[ERR] Fallo al crear el backup de la tabla: ".$this->table_name." Fecha: " .$GLOBALS['date']."\n";
+        	errorLog($msg);
+        	die($msg);
         }
+        
+        
+//         if ($retval != 0){
+//             $msg = "[ERR] Fallo al crear el backup de la tabla: ".$this->table_name." Fecha: " .$GLOBALS['date']."\n";
+//             errorLog($msg);
+//             die($msg);
+//         }
         
         //truncate system variable PGPASSWORD for security.
         $cmd = 'PGPASSWORD=""';
@@ -385,4 +458,237 @@ class Aigua{
         echo '<p id="OK">Dades insertades correctament'."\n";
         pg_close($this->connection);
     }
+    
+    public function showUpdateForm($id, $mes, $any, $p1, $p2, $p3, $totalf){
+    	echo '    			
+			<script type="txt/javascript">    			   		
+				$(document).ready(function (){    			
+ 					$("#btnAigua").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var p1 = $("#p1").val();
+  						var p2 = $("#p2").val();
+  						var p3 = $("#p3").val();
+ 						var totalf = $("#totalf").val();
+ 						var tipo = "Aigua";
+						var id = '.$id.';	
+    			
+ 						$.ajax({
+								   type: "POST",
+								   data: {id:id,mes:mes,temporada:any,p1:p1,p2:p2,p3:p3,totalf:totalf,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/updateData.php",
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+ 				});
+    			
+			</script>
+		<div class="col-md-12" id="contenedorAigua">
+			<h3 id="cabecera-formulario">Actulització de dades en el formulari Aigua</h3>
+				<form role="form" action="./insercion/ins_agua.php" method="POST">
+					<div class="col-md-12 col">
+						<div class="form-group">
+							<div class="col-md-8 col">
+								<div class="col-md-4 col">
+									<h4>Mes</h4>
+				   						<input class="form-control" id="selmes" type="text" name="MEs" value="'.$mes.'" required="required">
+
+								</div>
+								<div class="col-md-4 col">
+									<h4>Any</h4>
+										<input class="form-control" type="number" id="selany" name="anya" min="2022" max="2030" value="'.$any.'" required="required">
+								</div>
+							</div>
+							<div class="col-md-9 col">
+								<div class="col-md-3 col">
+									<h4>Tram 1</h4>
+										<input class="form-control" id="p1" type="float" name="p1" value="'.$p1.'">
+								</div>
+								<div class="col-md-3 col">
+										<h4>Tram 2</h4>
+										<input class="form-control" id="p2" type="float" name="p2" value="'.$p2.'">
+								</div>
+								<div class="col-md-3 col">
+									<h4>Tram 3</h4>
+										<input  class="form-control" id="p3" type="float" name="p3" value="'.$p3.'">
+								</div>
+							</div>
+							<div class="col-md-8 col">
+								<h4>Total Factura</h4>
+									<input class="form-control type="float" id="totalf" name="totalf" value="'.$totalf.'">
+							</div>
+							<div class="col-md-9 col">
+								<h4>Enviar a la Base de Dades</h4>
+									<input class="form-control btn btn-primary" id="btnAigua" name="submit" value="Enviar dades">
+							</div>
+							<br>
+							<br>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-8 col" id="responseInsert"></div>
+		';
+    }
+    
+    public function showForm(){
+    	echo '
+		
+			<script type="txt/javascript">
+ 				
+  
+				$(document).ready(function (){
+
+ 					$("#btnAigua").on("click",function(){
+ 						var mes = $("#selmes").val();
+  						var any = $("#selany").val();
+ 						var p1 = $("#p1").val();
+  						var p2 = $("#p2").val();
+  						var p3 = $("#p3").val();  						
+ 						var totalf = $("#totalf").val();
+ 						var tipo = "Aigua";
+
+ 						$.ajax({
+								   type: "POST",
+								   data: {mes:mes,any:any,p1:p1,p2:p2,p3:p3,totalf:totalf,tipo:tipo},
+      						       url: "../Ajax_Reception_PHP/insertData.php",								      						      
+      						       success: function(msg){
+      						           $("#responseInsert").html(msg);
+      						       }
+      					});
+ 					});
+ 				});
+          							 
+			</script>
+		<div class="col-md-12" id="contenedorAigua">
+			<h3 id="cabecera-formulario">Inserció de dades en el formulari Aigua</h3>
+				<form role="form" action="./insercion/ins_agua.php" method="POST">
+					<div class="col-md-12 col">
+						<div class="form-group">
+							<div class="col-md-8 col">
+								<div class="col-md-4 col">
+									<h4>Mes</h4>
+					   					<select class="form-control" id="selmes" name="mesosa" required="required" >
+										    <option>Gener</option>
+										    <option>Febrer</option>
+										    <option>Març</option>
+										    <option>Abril</option>
+										    <option>Maig</option>
+										    <option>Juny</option>
+										    <option>Juliol</option>
+										    <option>Agost</option>
+										    <option>Septembre</option>
+										    <option>Octubre</option>
+										    <option>Novembre</option>
+										    <option>Decembre</option>
+										  </select>
+								</div>
+								<div class="col-md-4 col">
+									<h4>Any</h4>
+										<input class="form-control" type="number" id="selany" name="anya" min="2022" max="2030" required="required">
+								</div>
+							</div>
+							<div class="col-md-9 col">
+								<div class="col-md-3 col">
+									<h4>Tram 1</h4>
+										<input class="form-control id="p1" type="float" name="tram1" value="0">
+								</div>
+								<div class="col-md-3 col">
+										<h4>Tram 2</h4>
+										<input class="form-control id="p2" type="float" name="tram2" value="0">
+								</div>
+								<div class="col-md-3 col">
+									<h4>Tram 3</h4>
+										<input  class="form-control" id="p3" type="float" name="tram3" value="0">
+								</div>
+							</div>
+							<div class="col-md-8 col">							
+								<h4>Total Factura</h4>
+									<input class="form-control type="float" id="totalf" name="totalf">
+							</div>
+							<div class="col-md-9 col">
+								<h4>Enviar a la Base de Dades</h4>
+									<input class="form-control btn btn-primary" id="btnAigua" name="submit" value="Enviar dades">	
+							</div>
+							<br>
+							<br>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-8 col" id="responseInsert"></div>
+		';
+    	$this->last_insert();
+//     	$preu = new Preu($db);
+//     	$preu->showLastPreus();
+    }
+    
+    public function insertOneData($mes,$any,$p1,$p2,$p3,$totalf){
+    	$temporada  = $any;
+    	$consum_1   = floatval($p1);
+    	$consum_2   = floatval($p2);
+    	$consum_3   = floatval($p3);
+    	$totalf     = floatval($totalf);
+    	
+    	$cmd = 'INSERT INTO pspv_schema.'.$this->table_name.'(mes,temporada,consum_tram1,consum_tram2,consum_tram3,totalf) ';
+    	$cmd .= 'VALUES (\''.$mes.'\','.$temporada.','.$consum_1.','.$consum_2.','.$consum_3.','.$totalf.');';
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos de  no fueron insertados: ". pg_last_error($this->connection)." Fecha: ".$GLOBALS['date']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);
+    		
+    		
+    	}else{
+    		echo "<h6>Dades Aigua insertades correctament</h6>";
+    	}
+    	
+    }
+    
+    public function updateData($id,$mes,$any,$p1,$p2,$p3,$totalf){
+    	$temporada  = $any;
+    	$consum_1   = floatval($p1);
+    	$consum_2   = floatval($p2);
+    	$consum_3   = floatval($p3);
+    	$totalf     = floatval($totalf);
+
+    	$cmd = 'UPDATE pspv_schema.'.$this->table_name.' SET 	mes = \''.$mes.'\', temporada = \''.$temporada.'\',
+																consum_tram1 = \''.$consum_1.'\', consum_tram2 = \''.$consum_2.'\',
+																consum_tram3 = \''.$consum_3.'\', totalf = \''.$totalf.'\'
+				WHERE id = \''.$id.'\';'; 
+						    	
+    	$res = pg_query($cmd);
+    	
+    	if(!$res){
+    		$msg = "[ERR] Fallo: los datos de  no fueron insertados: ". pg_last_error($this->connection)." Fecha: ".$GLOBALS['date']."\n";
+    		errorLog($msg);
+    		
+    		echo '<p id="Error">Ha habido un error en la súbida de datos</p>'."\n";
+    		echo '<p id="Error">'.$msg.'</p>'."\n";
+    		echo '<p id="Error">Procedemos a la recuperación de datos antiguos</p>'."\n";
+    		//En Caso de que falle la inserción introducimos los datos antiguos.
+    		//Si todo va bien, los datos nuevos pasan a ser los antiguos.
+    		//$this->recoveryOldData();
+    		die($msg);
+    		
+    		
+    	}else{
+    		echo "<h6>Dades Aigua insertades correctament</h6>";
+    	}
+    	
+    }
+    
+    
+    
+    
 }
